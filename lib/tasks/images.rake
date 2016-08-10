@@ -61,4 +61,16 @@ namespace :images do
       end
     end
   end
+
+  desc "Export results for images"
+  task :export, [:format] => :environment do |t, args|
+    format = args[:format] || 'csv'
+    images = Image.where('category <> ?', Image.categories[:unknown])
+
+    if format == 'yaml'
+      puts images.to_yaml
+    elsif format == 'json'
+      puts images.to_json
+    end
+  end
 end

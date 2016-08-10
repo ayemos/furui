@@ -1,0 +1,2 @@
+class LocalImage < Image
+end

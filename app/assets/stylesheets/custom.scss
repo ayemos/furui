@@ -1,0 +1,30 @@
+@import url(http://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+
+body {
+    font-weight: 100;
+    font-family: 'Noto Sans Japanese', sans-serif;
+    padding-top: 70px;
+}
+
+#top-navbar {
+    box-shadow: 0px 1px 5px 0px #000000;
+}
+
+#brand {
+    color: #330000;
+    float: none !important;
+}
+
+.btn {
+    border: none;
+    border-radius: 1px;
+    box-shadow: 0px 1px 3px 0px #000000;
+}
+
+.btn-primary {
+    background-color: #FF9933;
+}
+
+.btn-judge {
+    min-width: 200px;
+}

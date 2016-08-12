@@ -1,0 +1,18 @@
+.container
+  - @images.each do |image|
+    .row.p-a-1
+      .col-xs-6.text-xs-center#judged-image
+        - if image.is_a?(S3Image)
+          = image_tag_for_s3_image(image)
+        - elsif image.is_a?(LocalImage)
+          = image_tag_for_local_image(image)
+      .col-xs-6
+        %h2
+          = image.category
+        %h3.m-t-3 修正
+        .row
+          - Image.categories.except(:unknown).each do |category, _|
+            .col-lg-12.m-b-2
+              = link_to category, images_judge_path(image_id: image.id, category: category),
+                class: 'btn btn-judge btn-lg p-y-2 btn-primary',
+                style: "background-color: #{color_for_category(category, brightness=0.7)}"

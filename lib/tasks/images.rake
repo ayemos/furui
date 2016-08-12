@@ -5,7 +5,7 @@ IMAGE_BASE_PATH = 'public/images'
 
 namespace :images do
   desc "Create records for local images"
-  task :create_records_for_local_images, [:path_to_image_directory] => :environment do |t, args|
+  task :create_records_for_local_images, [:path_to_image_directory, :name] => :environment do |t, args|
     paths = []
 
     Find.find(Rails.root.join(IMAGE_BASE_PATH, args[:path_to_image_directory])) do |path|

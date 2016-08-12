@@ -1,5 +1,7 @@
 %nav.navbar.navbar-light.navbar-fixed-top.bg-faded#top-navbar
   .container
-    .navbar-header.text-xs-center
-      %a.navbar-brand#brand{:href => "#"} furui
-    #navbar.navbar-toggleable-xs.collapse
+    = link_to 'furui', :root, class: 'navbar-brand', id: 'brand'
+    %ul.nav.navbar-nav
+      %li.nav-item
+        = link_to 'Results', images_result_path, class: 'nav-link'
+

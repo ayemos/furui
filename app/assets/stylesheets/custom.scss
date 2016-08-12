@@ -1,9 +1,14 @@
 @import url(http://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
 
 body {
+    -webkit-text-size-adjust: 100%;
     font-weight: 100;
     font-family: 'Noto Sans Japanese', sans-serif;
     padding-top: 70px;
+    background-image: linear-gradient(rgba(10,10,10,.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10,10,10,.1) 1px, transparent 1px);
+    background-size:5px 5px, 5px 5px;
+    background-position:-1px -1px, -1px -1px, -1px -1px, -1px -1px
 }
 
 #top-navbar {
@@ -17,15 +22,9 @@ body {
 }
 
 .btn {
+    font-size: 1.5em;
+    font-weight: 200;
     border: none;
     border-radius: 1px;
     box-shadow: 0px 1px 3px 0px #000000;
-}
-
-.btn-primary {
-    background-color: #FF9933;
-}
-
-.btn-judge {
-    min-width: 200px;
 }

@@ -23,6 +23,7 @@ namespace :images do
 
       if %w(y Y yes YES Yes).include?(STDIN.gets().strip)
         paths.each do |path|
+          puts "Saving: #{path}"
           Image.create(
             category: :unknown,
             type: 'LocalImage',

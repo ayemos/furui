@@ -1,7 +1,10 @@
 class ImagesController < ApplicationController
-  # GET /images
   def index
     @image = Image.unknown.first
+  end
+
+  def result
+    @images = Image.where('category <> ?', 'unknown').all
   end
 
   def judge

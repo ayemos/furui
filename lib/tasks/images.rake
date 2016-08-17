@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'find'
 require 'aws_util'
 
@@ -17,12 +18,10 @@ namespace :images do
 
     paths = []
 
-    Find.find(Rails.root.join(IMAGE_BASE_PATH, args[:path_to_image_directory])) do |path|
+    Find.find(File.expand_path(args[:path_to_image_directory])) do |path|
       if File.file?(path) && Regexp.new('.(jpg|gif|png)$').match(path)
-        # /path/to/app/public/images/hoge.jpg => hoge.jpg
-        base_path = path[(path.index(IMAGE_BASE_PATH) + IMAGE_BASE_PATH.length + 1)..path.length - 1]
-        paths << base_path
-        puts "Found: #{base_path}"
+        paths << path
+        puts "Found: #{path}"
       end
     end
 
@@ -31,15 +30,18 @@ namespace :images do
       puts "Should I make #{paths.count} records for them? (y/n)"
 
       if %w(y Y yes YES Yes).include?(STDIN.gets().strip)
-        image_set = ImageSet.create(name: args[:name])
+        image_set = ImageSet.where(name: args[:name]).first_or_create
+        image_path = Rails.root.join(IMAGE_BASE_PATH, args[:name])
+        FileUtils.mkdir(image_path) unless File.directory?(image_path)
 
         paths.each do |path|
           puts "Saving: #{path}"
-          image_set.images << Image.new(
+          image_set.images << LocalImage.new(
             category: :unknown,
-            type: 'LocalImage',
             path: path
           )
+
+          FileUtils.cp_r(path, Rails.root.join(IMAGE_BASE_PATH, args[:name], File.basename(path)))
         end
       end
     end
@@ -74,9 +76,8 @@ namespace :images do
         image_set = ImageSet.create(name: args[:name])
 
         keys.each do |key|
-          image_set.images << Image.new(
+          image_set.images << S3Image.new(
             category: :unknown,
-            type: 'S3Image',
             bucket_name: args[:bucket_name],
             key: key
           )

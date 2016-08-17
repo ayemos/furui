@@ -11,6 +11,14 @@ body {
     background-position:-1px -1px, -1px -1px, -1px -1px, -1px -1px
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 200;
+}
+
+img {
+    max-width: 100%;
+}
+
 #top-navbar {
     box-shadow: 0px 1px 5px 0px #000000;
 }

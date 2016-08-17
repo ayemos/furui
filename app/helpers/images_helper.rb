@@ -1,12 +1,12 @@
 require 'aws_util'
 
 module ImagesHelper
-  def image_tag_for_local_image(local_image)
-    image_tag(local_image.path)
-  end
-
-  def image_tag_for_s3_image(s3_image)
-    image_tag(url_for_s3_image(s3_image))
+  def smart_image_tag(image, *opts)
+    if image.is_a?(S3Image)
+      image_tag(url_for_s3_image(image), *opts)
+    elsif image.is_a?(LocalImage)
+      image_tag(image.path, *opts)
+    end
   end
 
   def color_for_category(category, brightness=nil)

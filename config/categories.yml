@@ -2,3 +2,5 @@ food:
     料理画像
 nonfood:
     料理画像ではない
+vague:
+    よくわからない

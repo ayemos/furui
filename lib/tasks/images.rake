@@ -5,7 +5,16 @@ IMAGE_BASE_PATH = 'public/images'
 
 namespace :images do
   desc "Create records for local images"
-  task :create_records_for_local_images, [:path_to_image_directory, :name] => :environment do |t, args|
+  task :create_records_for_local_images, [:name, :path_to_image_directory] => :environment do |t, args|
+    if ImageSet.exists?(name: args[:name])
+      puts "Image set named #{args[:name]} already exists."
+      puts "Do you want to add images to it?(y/n)"
+
+      unless %w(y Y yes YES Yes).include?(STDIN.gets().strip)
+        return
+      end
+    end
+
     paths = []
 
     Find.find(Rails.root.join(IMAGE_BASE_PATH, args[:path_to_image_directory])) do |path|
@@ -22,9 +31,11 @@ namespace :images do
       puts "Should I make #{paths.count} records for them? (y/n)"
 
       if %w(y Y yes YES Yes).include?(STDIN.gets().strip)
+        image_set = ImageSet.create(name: args[:name])
+
         paths.each do |path|
           puts "Saving: #{path}"
-          Image.create(
+          image_set.images << Image.new(
             category: :unknown,
             type: 'LocalImage',
             path: path
@@ -35,7 +46,16 @@ namespace :images do
   end
 
   desc "Create records for s3 images"
-  task :create_records_for_s3_images, [:bucket_name, :prefix, :max_num] => :environment do |t, args|
+  task :create_records_for_s3_images, [:name, :bucket_name, :prefix, :max_num] => :environment do |t, args|
+    if ImageSet.exists?(name: args[:name])
+      puts "Image set named #{args[:name]} already exists."
+      puts "Do you want to add images to it?(y/n)"
+
+      unless %w(y Y yes YES Yes).include?(STDIN.gets().strip)
+        return
+      end
+    end
+
     keys = []
     max_num = (args[:max_num] || 10).to_i
 
@@ -51,8 +71,10 @@ namespace :images do
       puts "Should I make #{keys.count} records for them? (y/n)"
 
       if %w(y Y yes YES Yes).include?(STDIN.gets().strip)
+        image_set = ImageSet.create(name: args[:name])
+
         keys.each do |key|
-          Image.create(
+          image_set.images << Image.new(
             category: :unknown,
             type: 'S3Image',
             bucket_name: args[:bucket_name],
@@ -63,10 +85,10 @@ namespace :images do
     end
   end
 
-  desc "Export results for images"
-  task :export, [:format] => :environment do |t, args|
+  desc "Export results for image set"
+  task :export, [:name, :format] => :environment do |t, args|
     format = args[:format] || 'csv'
-    images = Image.where('category <> ?', Image.categories[:unknown])
+    images = ImageSet.where(name: args[:name]).first.images.where('category <> ?', Image.categories[:unknown])
 
     if format == 'yaml'
       puts images.to_yaml

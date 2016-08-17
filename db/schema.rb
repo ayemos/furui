@@ -10,16 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160810060012) do
+ActiveRecord::Schema.define(version: 20160812041840) do
+
+  create_table "image_sets", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "images", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "category",    limit: 1, default: 0,            null: false
-    t.string   "type",                  default: "LocalImage", null: false
+    t.integer  "category",     limit: 1, default: 0,            null: false
+    t.string   "type",                   default: "LocalImage", null: false
     t.string   "bucket_name"
     t.string   "key"
     t.string   "path"
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.integer  "image_set_id"
+    t.index ["image_set_id"], name: "index_images_on_image_set_id", using: :btree
   end
 
+  add_foreign_key "images", "image_sets"
 end

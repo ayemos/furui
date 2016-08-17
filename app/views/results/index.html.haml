@@ -1,0 +1,17 @@
+.container
+  .row
+    .col-lg-12
+      %h1
+        Results
+  .row
+    - @image_sets.each do |image_set|
+      .col-lg-3.col-md-4.col-sm.6.col-xs-12
+        .card
+          = smart_image_tag(image_set.images.first, class: 'card-img-top')
+          .card-block
+            %h4.card-title
+              = image_set.name
+            %p.card-text
+              = "#{image_set.images.count}枚中/#{image_set.images.where('category <> ?', 'unknown').count}枚判定済み"
+          .card-block
+            = link_to 'Open', result_path(image_set), class: 'card-link'

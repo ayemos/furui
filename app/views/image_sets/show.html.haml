@@ -1,0 +1,19 @@
+.container-fluid
+  .row.p-a-1#judge-window
+    - if @image.blank?
+      .col-lg-12.text-xs-center#judge-image
+        %h1 おつかれさまでした！
+        = link_to '結果を見る', result_path(@image_set), class: 'btn btn-primary btn-lg m-t-1'
+    - else
+      .col-lg-12.text-xs-center#judge-image
+        = smart_image_tag(@image)
+      .col-lg-12.text-xs-center
+        .row.m-t-1
+          %h3
+            = "あと #{@image_set.images.unknown.count} 枚"
+        .row
+          - Image.categories.except(:unknown).each do |category, _|
+            .col-lg-12.m-t-3
+              = link_to category, images_judge_path(image_id: @image.id, category: category),
+                class: 'btn btn-judge btn-lg p-y-2 btn-primary',
+                style: "background-color: #{color_for_category(category, brightness=0.7)}"

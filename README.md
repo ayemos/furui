@@ -1,24 +1,41 @@
-# README
+# Furui
+Furui is a Rails application where user can label images by hand with arbitrarily configured categories.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Installation
+```
+git clone github.com/ayemos/furui
+cd furui
+```
 
-Things you may want to cover:
+# How to use
 
-* Ruby version
+## Setup Database
+```
+bundle exec rake db:create
+bundle exec rake db:migrate
+```
 
-* System dependencies
+## Place images to classify
+First you have to place the images you need to give labels.
 
-* Configuration
+### Images from local file system
+```
+bundle exec rake 'images:create_records_for_local_images[NAME_OF_DATASET, PATH_TO_IMAGE_DIR]'
+```
 
-* Database creation
+### Images from Amazon S3
+WIP
 
-* Database initialization
+## Run server
+```
+bundle exec rails s
+```
 
-* How to run the test suite
+## Classify
+Open `localhost:3000` on your browser and classify images.
 
-* Services (job queues, cache servers, search engines, etc.)
+## Retrieve results
+```
+bundle exec rake 'images:export[NAME_OF_DATASET, OUTPUT_FORMAT]'
+```
 
-* Deployment instructions
-
-* ...
